@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name='description' content='unknown pleasures'>
+  <title>Simple Pleasures</title>
+  <link rel='stylesheet' href='index.css'>
+</head>
+<body>
+  <main>
+    <p id='pleasure'>Loading pleasure...</p>
+  </main>
+</body>
+<script>
+  (async () => {
+    const randomize = max => Math.floor(Math.random() * max);
+
+    try {
+      const randomPage = randomize(14);
+      const data = await fetch(`https://api.are.na/v2/channels/a-catalogue-of-simple-pleasures/contents/?page=${randomPage}`);
+      const { contents } = await data.json();
+
+      const filteredContent = contents.filter(({ class: cClass }) => cClass === 'Text');
+
+      const randomItemInd = randomize(filteredContent.length);
+      const { content } = filteredContent[randomItemInd];
+
+      const pleasureEl = document.getElementById('pleasure');
+      pleasureEl.innerHTML = content;
+    } catch {}
+  })()
+</script>
+</html>
